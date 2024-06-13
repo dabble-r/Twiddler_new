@@ -1,3 +1,8 @@
+$(document).ready(() => {
+  const $body = $('body');
+  //$body.html('');
+
+
 
 // Function to display home timeline
 const displayHomeTimeline = () => {
@@ -28,6 +33,9 @@ const displayUserTimeline = (username) => {
     const $tweet = $('<div></div>').addClass('tweet');
     const tweetText = `@${tweet.user}: ${tweet.message}`;
     $tweet.text(tweetText);
+    window.visitor = 'Nick';
+    streams.users['Nick'] = [];
+    
 
     const $timestamp = $('<div></div>').addClass('timestamp');
     const timestampText = moment(tweet.created_at).fromNow();
@@ -72,16 +80,18 @@ $('#tweet-submit').on('click', function() {
     displayHomeTimeline(); // Refresh the timeline
   }
 });
-
+/*
 // Initial call to display tweets if any exist
 $(document).ready(function() {
   displayHomeTimeline();
 });
-
+*/
 // Utility function for letting students add "write a tweet" functionality
 // (NOTE: Not used by the rest of this file.)
 const writeTweet = (message) => {
-  const visitor = window.visitor || 'visitor'; // You can set a global visitor or use 'visitor' as default
+ // window.visitor = $('#username-input').val();
+ 
+  const visitor = $('#username-input').val(); // You can set a global visitor or use 'visitor' as default
 
   if (!visitor){
     throw new Error('Set the global visitor property!');
@@ -93,4 +103,7 @@ const writeTweet = (message) => {
     created_at: new Date(),
   };
   addTweet(tweet);
+
 };
+
+});

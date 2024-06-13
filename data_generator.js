@@ -9,7 +9,7 @@ const streams = {
   users: {
     shawndrost: [],
     sharksforcheap: [],
-    mracus: [],
+    marcus: [],
     douglascalhoun: [],
   },
 };
@@ -18,6 +18,9 @@ const users = Object.keys(streams.users);
 // Utility function for adding tweets to our data structures
 const addTweet = (newTweet) => {
   const username = newTweet.user;
+  if (!streams.users[username]) {
+    streams.users[username] = [];
+  }
   streams.users[username].push(newTweet);
   streams.home.push(newTweet);
 };
@@ -67,6 +70,7 @@ scheduleNextTweet();
 
 // Utility function for letting students add "write a tweet" functionality
 // (NOTE: Not used by the rest of this file.)
+/*
 const writeTweet = (message) => {
   const visitor = window.visitor;
 
@@ -80,3 +84,4 @@ const writeTweet = (message) => {
   };
   addTweet(tweet);
 };
+*/
