@@ -88,7 +88,7 @@ $(document).ready(function() {
 const writeTweet = (message) => {
  // window.visitor = $('#username-input').val();
  
-  const visitor = $('#username-input').val(); // You can set a global visitor or use 'visitor' as default
+  const visitor = $('#username-input').val() || 'visitor'; // You can set a global visitor or use 'visitor' as default
 
   if (!visitor){
     throw new Error('Set the global visitor property!');

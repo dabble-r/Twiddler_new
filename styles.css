@@ -8,8 +8,18 @@ body {
   padding: 5px;
 }
 
-#username-form,
 #tweet-form {
+  height: 125px;
+  width: 750px;
+  background-color: #fff;
+  padding: 5px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  border-radius: 5px;
+}
+#username-form {
+  width: 300px;
+  resize: both;
   background-color: #fff;
   padding: 5px;
   margin-bottom: 20px;
@@ -19,22 +29,25 @@ body {
 
 #username-input,
 #tweet-input {
-  width: 60%;
+  width: 90%;
+  height: 50%;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  text-align: left;
 }
 
 #username-submit,
 #tweet-submit {
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 15px;
   background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  height: auto;
 }
 
 #username-submit:hover,
