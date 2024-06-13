@@ -1,0 +1,15 @@
+.tweet {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .username {
+      font-weight: bold;
+    }
+    .timestamp {
+      font-size: 0.8em;
+      color: #999;
+    }
+    #user-timeline {
+      display: none;
+    }
