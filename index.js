@@ -33,10 +33,7 @@ const displayUserTimeline = (username) => {
     const $tweet = $('<div></div>').addClass('tweet');
     const tweetText = `@${tweet.user}: ${tweet.message}`;
     $tweet.text(tweetText);
-    window.visitor = 'Nick';
-    streams.users['Nick'] = [];
     
-
     const $timestamp = $('<div></div>').addClass('timestamp');
     const timestampText = moment(tweet.created_at).fromNow();
     $timestamp.text(timestampText);

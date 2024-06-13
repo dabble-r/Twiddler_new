@@ -20,9 +20,12 @@ const addTweet = (newTweet) => {
   const username = newTweet.user;
   if (!streams.users[username]) {
     streams.users[username] = [];
+    streams.users[username].push(newTweet);
+    streams.home.push(newTweet);
+  } else if (streams.users[username]) {
+    streams.users[username].push(newTweet);
+    streams.home.push(newTweet);
   }
-  streams.users[username].push(newTweet);
-  streams.home.push(newTweet);
 };
 
 // Utility function
