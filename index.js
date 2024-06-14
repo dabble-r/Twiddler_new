@@ -43,15 +43,23 @@ const displayUserTimeline = (username) => {
   });
 };
 
+//event listener user click on hashtag
+//user clicks, display timeline of all like hashtags
+
+
+
 // Event listener for the new tweet button
 $('#new-tweet-button').on('click', function() {
   // Generate 10 new random tweets
   for (let i = 0; i < 10; i++) {
     generateRandomTweet();
+    
+    //console.log(hashtags(streams.home));
   }
 
   // Display the home timeline
   displayHomeTimeline();
+  console.log(hashtags(streams.home));
 });
 
 // Event delegation for username clicks to display user timeline
@@ -120,7 +128,63 @@ const writeTweet = (message) => {
     created_at: new Date(),
   };
   addTweet(tweet);
-
   };
 
+// Automatic Functionality to save hashtags and usernmames to a data structure
+// all hash
+const hashtags = function(arr) {
+    //regex starts at # and stops at whitespace
+   
+    //map points to streams.hashtags object
+    //intialized as empty object
+    let map = streams.hashtags;
+    let re = /#[\w\-.]+/g;
+    arr.forEach(elem => {
+      let count = {};
+      let username = elem.user;
+      let timestamp = moment(elem.created_at).fromNow();
+      let hashtag = elem.message.match(re);
+
+      if (hashtag) {
+        hashtag.toString();
+        //obj does not hashtag property
+        if (!map[hashtag]) {
+          //create hashtag property and assign to an object
+          //obj[hashtag] = {};
+          //for that hashtag, assign 'username' property to username
+          //for that hashtag, assign 'timestamp' property to timestamp
+          map[hashtag] = {};
+          map[hashtag]['username'] = [];
+          map[hashtag]['username'].push(username);
+          map[hashtag]['timestamp'] = [];
+          map[hashtag]['timestamp'].push(timestamp);
+          map[hashtag]['count'] = 1;
+          
+        } 
+        if (map[hashtag]) {
+          map[hashtag]['count']++;
+        }
+        // if the hashtag already exsits on the object as a property
+        // if for that hastag, the 'username' already has the username 
+        if (!map[hashtag]['username'].includes(username)) {
+            map[hashtag]['username'].push(username);
+            map[hashtag]['timestamp'].push(timestamp);
+        } else if (map[hashtag]['username'].includes(username)) {
+            map[hashtag]['timestamp'].push(timestamp);
+          }
+        }
+        
+      })
+      //console.log(streams.home)
+      
+    return map;
+    }
+    
+
+    
+   
+     
+
+
+  
 });
