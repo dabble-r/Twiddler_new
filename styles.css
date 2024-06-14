@@ -105,7 +105,8 @@ body {
   color: #999;
 }
 
-#back-button {
+#back-button-hashtags,
+#back-button-user {
   padding: 8px 15px;
   font-size: 14px;
   background-color: #fff;

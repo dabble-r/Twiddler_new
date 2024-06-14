@@ -43,16 +43,6 @@ const displayUserTimeline = (username) => {
 };
 
 
-
-
-
-
-
-
-
-
-
-
 // Event listener for the new tweet button
 $('#new-tweet-button').on('click', function() {
   // Generate 10 new random tweets
@@ -61,8 +51,11 @@ $('#new-tweet-button').on('click', function() {
     
 }
   // Display the home timeline
+  $('#hashtag-timeline').hide();
   displayHomeTimeline();
-  hashtags();
+  
+  
+
 });
 
 // Event delegation for username clicks to display user timeline
@@ -74,12 +67,55 @@ $('#random-tweet-details').on('click', '.username', function() {
   $('#user-timeline').show();
 });
 
+    //console.log(streams.home)
+    
+    const hashtagNames = function() {
+      let re = /#[\w\-.]+/g;
+      //object to nest hashtag name/count
+      //object to nest usernametimestamp
+      //outputs array of random user names
+      let names = streams.home.forEach(obj => {
+        let namesArr = []
+        if (obj.message.match(re)) {
+          if (namesArr.indexOf(obj.user) == -1) {
+            namesArr.push(obj.user);
+          }
+        }
+        return namesArr;
+      })
+      return names
+    }
+    console.log(hashtagNames());
+    //outputs obj of 
+         
+    
+/*
+    //event listener user click on hashtag
+    //user clicks, display timeline of all like hashtags
+    // Event delegation for username clicks to display user timeline
+    $('#hashtag-details').on('click','.hashtag', function() {
+      const hashtag = $(this).text();
+      
+      $('#random-tweet-details').hide();
+      $('#user-timeline').hide();
+      $('#hashtag-timeline').show();
+    
+    })
+ */
+
 // Event listener for the back button to return to home timeline
-$('#back-button').on('click', function() {
+$('#back-button-user').on('click', function() {
   $('#user-timeline').hide();
   $('#hashtag-timeline').hide();
   $('#random-tweet-details').show();
 });
+
+//event listener for the back button hashtag return to random tweets timeline
+$('#back-button-hashtag').on('click', function() {
+  $('#user-timeline').hide();
+  $('#hashtag-timeline').hide();
+  $('#random-tweet-details').show();
+})
 
 // Event listener for the dropdown button_to tweet
 $('#to-tweet').on('click', function() {
@@ -95,7 +131,7 @@ $('#to-tweet').on('click', function() {
   }
 });
 
-//
+
 //user clicks not to tweet button
 $('#not-to-tweet').on('click', function() {
   const message = $('#tweet-input').val();
@@ -130,8 +166,10 @@ const writeTweet = (message) => {
   addTweet(tweet);
   };
 
-// Automatic Functionality to save hashtags and usernmames to a data structure
-// all hash
+
+// Functionality to save hashtags, instancs of hashtages, usernmames, and timestamps to a data structure
+// 
+/*
 const allTweets = streams.home; 
 const hashtags = function(arr) {
     //regex starts at # and stops at whitespace
@@ -139,7 +177,7 @@ const hashtags = function(arr) {
     //map points to streams.hashtags object
     //intialized as empty object
     arr = allTweets;
-    let map = streams.hashtags;
+    let cache = streams.hashtags;
     let re = /#[\w\-.]+/g;
 
     arr.forEach(elem => {
@@ -151,69 +189,69 @@ const hashtags = function(arr) {
       if (hashtag) {
         hashtag.toString();
         //obj does not hashtag property
-        if (!map[hashtag]) {
+              
+          if (!cache[hashtag]) {
           //create hashtag property and assign to an object
           //obj[hashtag] = {};
           //for that hashtag, assign 'username' property to username
           //for that hashtag, assign 'timestamp' property to timestamp
-          map[hashtag] = {};
-          map[hashtag]['username'] = [];
-          map[hashtag]['username'].push(username);
-          map[hashtag]['timestamp'] = [];
-          map[hashtag]['timestamp'].push(timestamp);
-          map[hashtag]['count'] = 1;
-        } 
-        if (map[hashtag]) {
-          map[hashtag]['count']++;
+            cache[hashtag] = {};
+            cache[hashtag]['username'] = [username];
+            cache[hashtag]['timestamp'] = [timestamp];
+            cache[hashtag]['count'] = 1;
+           // cache['timestamp'] = [timestamp];
+        } else if (cache[hashtag]) {
+            cache[hashtag]['count']++;
+            cache[hashtag]['timestamp'].push(timestamp);
+            if (!cache[hashtag]['username'].includes(username)) {
+                cache[hashtag]['username'].push(username);
+            }
         }
-        // if the hashtag already exsits on the object as a property
-        // if for that hastag, the 'username' already has the username 
-        if (!map[hashtag]['username'].includes(username)) {
-            map[hashtag]['username'].push(username);
-            map[hashtag]['timestamp'].push(timestamp);
-        } else if (map[hashtag]['username'].includes(username)) {
-            map[hashtag]['timestamp'].push(timestamp);
-          }
-        }
+       }
       })
-      return map;
+      return cache;
     }
+    //to view data structure of return cache of all hashtags and details
+    //cache returned as nested object
+    //hashtags accessed there
+    //console.log(hashtags())
 
-    const hashTagDetails = hashtags();
     
     const displayHashtagsTimeline = function() {
       $('#hashtag-details').empty();
-            
-       hashTagDetails.forEach(elem => {
+
+      const hashtagDetails = hashtags();
+      //array of only hashtags in the nested object--verified
+       const onlyHashtags = Object.keys(hashtagDetails);
+       //array of only usernames
+       const onlyNames = obj => {
+        let names = [];
+          for (let key in obj) {
+            if (key == 'username') {
+                names = names.concat(Object.values(key)); 
+            }
+          }
+          return names;
+       }
+         console.log(onlyNames(hashtagDetails));
+         
+
+       onlyHashtags.forEach(tag => {
         const $hashtags = $('<div></div>')
            .addClass('hashtag')
            .css('color', 'blue')
            .css('cursor', 'pointer');
-        const hashtagText = elem[0];
-        console.log(hashtagText)
-        const $count = $('<span></span>').text(elem[hashtag]['count']);
-        $hashtags.append(hashtagText).append($count);
-   
+
+        const hashtagText = tag;
+        $hashtags.append(hashtagText);
         $('#hashtag-details').prepend($hashtags);
-   
        });
+
+      
    };
    
-   
-     //event listener user click on hashtag
-    //user clicks, display timeline of all like hashtags
-    // Event delegation for username clicks to display user timeline
-
-  $('#hashtag-details').on('click','.hashtag', function() {
-    
-    const hashtag = $(this).text();
-    displayHashtagsTimeline(hashtag);
-    $('#random-tweet-details').hide();
-    $('#user-timeline').hide();
-    $('#hashtag-timeline').show();
-  
-  })
-
+   displayHashtagsTimeline()
+    */
 
   
 });
