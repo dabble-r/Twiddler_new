@@ -1,6 +1,4 @@
 
-
-
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
@@ -17,6 +15,7 @@ body {
   border-bottom: 1px solid #ccc;
   border-radius: 5px;
 }
+
 #username-form {
   width: 300px;
   resize: both;
@@ -27,8 +26,7 @@ body {
   border-radius: 5px;
 }
 
-#username-input,
-#tweet-input {
+#username-input {
   width: 90%;
   height: 50%;
   padding: 10px;
@@ -38,7 +36,28 @@ body {
   text-align: left;
 }
 
-#username-submit,
+#tweet-input {
+  width: 95%;
+  height: 50%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: left;
+}
+
+#username-submit {
+  padding: 10px 20px;
+  font-size: 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: auto;
+  width: 100px;
+}
+/*
+//updated style with bootstrap
 #tweet-submit {
   padding: 10px 20px;
   font-size: 15px;
@@ -49,10 +68,12 @@ body {
   cursor: pointer;
   height: auto;
 }
+*/
 
-#username-submit:hover,
-#tweet-submit:hover {
+#not-to-tweet:hover,
+#to-tweet:hover {
   background-color: #45a049;
+  cursor: pointer;
 }
 
 #random-tweet-details,

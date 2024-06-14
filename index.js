@@ -1,6 +1,6 @@
 $(document).ready(() => {
   const $body = $('body');
-  //$body.html('');
+//$('#back-button').html('');
 
 
 
@@ -68,15 +68,35 @@ $('#back-button').on('click', function() {
   $('#random-tweet-details').show();
 });
 
-// Event listener for the tweet submit button
-$('#tweet-submit').on('click', function() {
+// Event listener for the dropdown button_to tweet
+$('#to-tweet').on('click', function() {
   const message = $('#tweet-input').val();
+  const alert = 'Looks like there\'s no tweet!';
   if (message.trim() !== '') {
     writeTweet(message);
     $('#tweet-input').val(''); // Clear the input field
     displayHomeTimeline(); // Refresh the timeline
+  } else if (message.trim() == '') { // if no tweet found
+     displayHomeTimeline();           //display timeline
+     window.alert(alert);             //show alert message
   }
 });
+
+//
+//user clicks not to tweet button
+$('#not-to-tweet').on('click', function() {
+  const message = $('#tweet-input').val();
+  const username = $('#username-input').val();
+  if (message.trim() !== '' && username.trim() !== '') {
+       writeTweet(`'${message}' was a failed tweet.`);
+       streams.home.pop();
+       displayHomeTimeline();
+    } 
+    window.alert('Don\'t be shy!');
+    displayHomeTimeline();
+  }); 
+
+
 /*
 // Initial call to display tweets if any exist
 $(document).ready(function() {
@@ -86,7 +106,7 @@ $(document).ready(function() {
 // Utility function for letting students add "write a tweet" functionality
 // (NOTE: Not used by the rest of this file.)
 const writeTweet = (message) => {
- // window.visitor = $('#username-input').val();
+ // window.visitor = 'visitor';
  
   const visitor = $('#username-input').val() || 'visitor'; // You can set a global visitor or use 'visitor' as default
 
@@ -101,6 +121,6 @@ const writeTweet = (message) => {
   };
   addTweet(tweet);
 
-};
+  };
 
 });
