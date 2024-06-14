@@ -3,7 +3,6 @@ $(document).ready(() => {
 //$('#back-button').html('');
 
 
-
 // Function to display home timeline
 const displayHomeTimeline = () => {
   $('#random-tweet-details').empty();
@@ -43,8 +42,14 @@ const displayUserTimeline = (username) => {
   });
 };
 
-//event listener user click on hashtag
-//user clicks, display timeline of all like hashtags
+
+
+
+
+
+
+
+
 
 
 
@@ -54,12 +59,10 @@ $('#new-tweet-button').on('click', function() {
   for (let i = 0; i < 10; i++) {
     generateRandomTweet();
     
-    //console.log(hashtags(streams.home));
-  }
-
+}
   // Display the home timeline
   displayHomeTimeline();
-  console.log(hashtags(streams.home));
+  hashtags();
 });
 
 // Event delegation for username clicks to display user timeline
@@ -67,12 +70,14 @@ $('#random-tweet-details').on('click', '.username', function() {
   const username = $(this).text().substring(1); // Remove the @ symbol
   displayUserTimeline(username);
   $('#random-tweet-details').hide();
+  $('#hashtag-timeline').hide();
   $('#user-timeline').show();
 });
 
 // Event listener for the back button to return to home timeline
 $('#back-button').on('click', function() {
   $('#user-timeline').hide();
+  $('#hashtag-timeline').hide();
   $('#random-tweet-details').show();
 });
 
@@ -105,12 +110,7 @@ $('#not-to-tweet').on('click', function() {
   }); 
 
 
-/*
-// Initial call to display tweets if any exist
-$(document).ready(function() {
-  displayHomeTimeline();
-});
-*/
+
 // Utility function for letting students add "write a tweet" functionality
 // (NOTE: Not used by the rest of this file.)
 const writeTweet = (message) => {
@@ -132,15 +132,18 @@ const writeTweet = (message) => {
 
 // Automatic Functionality to save hashtags and usernmames to a data structure
 // all hash
+const allTweets = streams.home; 
 const hashtags = function(arr) {
     //regex starts at # and stops at whitespace
    
     //map points to streams.hashtags object
     //intialized as empty object
+    arr = allTweets;
     let map = streams.hashtags;
     let re = /#[\w\-.]+/g;
+
     arr.forEach(elem => {
-      let count = {};
+      
       let username = elem.user;
       let timestamp = moment(elem.created_at).fromNow();
       let hashtag = elem.message.match(re);
@@ -159,7 +162,6 @@ const hashtags = function(arr) {
           map[hashtag]['timestamp'] = [];
           map[hashtag]['timestamp'].push(timestamp);
           map[hashtag]['count'] = 1;
-          
         } 
         if (map[hashtag]) {
           map[hashtag]['count']++;
@@ -173,17 +175,44 @@ const hashtags = function(arr) {
             map[hashtag]['timestamp'].push(timestamp);
           }
         }
-        
       })
-      //console.log(streams.home)
-      
-    return map;
+      return map;
     }
-    
 
+    const hashTagDetails = hashtags();
     
+    const displayHashtagsTimeline = function() {
+      $('#hashtag-details').empty();
+            
+       hashTagDetails.forEach(elem => {
+        const $hashtags = $('<div></div>')
+           .addClass('hashtag')
+           .css('color', 'blue')
+           .css('cursor', 'pointer');
+        const hashtagText = elem[0];
+        console.log(hashtagText)
+        const $count = $('<span></span>').text(elem[hashtag]['count']);
+        $hashtags.append(hashtagText).append($count);
    
-     
+        $('#hashtag-details').prepend($hashtags);
+   
+       });
+   };
+   
+   
+     //event listener user click on hashtag
+    //user clicks, display timeline of all like hashtags
+    // Event delegation for username clicks to display user timeline
+
+  $('#hashtag-details').on('click','.hashtag', function() {
+    
+    const hashtag = $(this).text();
+    displayHashtagsTimeline(hashtag);
+    $('#random-tweet-details').hide();
+    $('#user-timeline').hide();
+    $('#hashtag-timeline').show();
+  
+  })
 
 
   
