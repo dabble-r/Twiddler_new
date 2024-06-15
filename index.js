@@ -48,12 +48,12 @@ $('#new-tweet-button').on('click', function() {
   // Generate 10 new random tweets
   for (let i = 0; i < 10; i++) {
     generateRandomTweet();
-    
+   
 }
   // Display the home timeline
   $('#hashtag-timeline').hide();
   displayHomeTimeline();
-  
+  console.log(hashtagDetails(streams.home));
   
 
 });
@@ -67,26 +67,7 @@ $('#random-tweet-details').on('click', '.username', function() {
   $('#user-timeline').show();
 });
 
-    //console.log(streams.home)
     
-    const hashtagNames = function() {
-      let re = /#[\w\-.]+/g;
-      //object to nest hashtag name/count
-      //object to nest usernametimestamp
-      //outputs array of random user names
-      let names = streams.home.forEach(obj => {
-        let namesArr = []
-        if (obj.message.match(re)) {
-          if (namesArr.indexOf(obj.user) == -1) {
-            namesArr.push(obj.user);
-          }
-        }
-        return namesArr;
-      })
-      return names
-    }
-    console.log(hashtagNames());
-    //outputs obj of 
          
     
 /*
@@ -169,48 +150,43 @@ const writeTweet = (message) => {
 
 // Functionality to save hashtags, instancs of hashtages, usernmames, and timestamps to a data structure
 // 
-/*
-const allTweets = streams.home; 
-const hashtags = function(arr) {
-    //regex starts at # and stops at whitespace
-   
-    //map points to streams.hashtags object
-    //intialized as empty object
-    arr = allTweets;
-    let cache = streams.hashtags;
-    let re = /#[\w\-.]+/g;
+const hashtagDetails = function(arr) {
+  let cache = {};
+  let re = /#[\w\-.]+/g;
 
-    arr.forEach(elem => {
+  arr.forEach(obj => {
+      let username = obj.user;
+      let timestamp = moment(obj.created_at).fromNow();
+      let hashtags = obj.message.match(re); // Note the plural 'hashtags'
+
+      // if obj in streams.home contains at least 1 hashtag
+      if (hashtags) {
+          hashtags.forEach(hashtag => {
+              // if the cache obj prop hashtag does not have the same value hashtag
+              if (!cache[hashtag]) {
+                  // create hashtag prop and assign to an object with count and details
+                  cache[hashtag] = {
+                      count: 1,
+                      details: {}
+                  };
+              } else {
+                  cache[hashtag].count++;
+              }
+
+              if (!cache[hashtag].details[username]) {
+                  cache[hashtag].details[username] = [];
+              }
+              // push the curr timestamp val to nested timestamp array
+              cache[hashtag].details[username].push(timestamp);
+          });
+      }
+  });
+
+  return cache;
+};
+
       
-      let username = elem.user;
-      let timestamp = moment(elem.created_at).fromNow();
-      let hashtag = elem.message.match(re);
-
-      if (hashtag) {
-        hashtag.toString();
-        //obj does not hashtag property
-              
-          if (!cache[hashtag]) {
-          //create hashtag property and assign to an object
-          //obj[hashtag] = {};
-          //for that hashtag, assign 'username' property to username
-          //for that hashtag, assign 'timestamp' property to timestamp
-            cache[hashtag] = {};
-            cache[hashtag]['username'] = [username];
-            cache[hashtag]['timestamp'] = [timestamp];
-            cache[hashtag]['count'] = 1;
-           // cache['timestamp'] = [timestamp];
-        } else if (cache[hashtag]) {
-            cache[hashtag]['count']++;
-            cache[hashtag]['timestamp'].push(timestamp);
-            if (!cache[hashtag]['username'].includes(username)) {
-                cache[hashtag]['username'].push(username);
-            }
-        }
-       }
-      })
-      return cache;
-    }
+    /*
     //to view data structure of return cache of all hashtags and details
     //cache returned as nested object
     //hashtags accessed there
@@ -246,9 +222,7 @@ const hashtags = function(arr) {
         $hashtags.append(hashtagText);
         $('#hashtag-details').prepend($hashtags);
        });
-
-      
-   };
+  }) 
    
    displayHashtagsTimeline()
     */
