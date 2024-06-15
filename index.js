@@ -9,14 +9,20 @@ const displayHomeTimeline = () => {
   let re = /#[\w\-.]+/g;
   streams.home.forEach(tweet => {
     
-   let hashtagText = `${tweet.message.match(re)}`;
+   
+   
    if (re.test(tweet.message)) {
-    const $hashtag = $('<span></span>')
-    .addClass('hashtag')
-    .text(hashtagText)
-    .css('color', 'blue')
-    .css('cursor', 'pointer');
+    const $hashtag = $('<div></div>')
+      .addClass('hashtag');
     
+    let $hashtagText = $('<span></span')
+      .attr('id', 'hashtag-details')
+      .text(tweet.message.match(re))
+      .css('color', 'blue')
+      .css('cursor', 'pointer');
+    
+    $hashtag.append($hashtagText);
+
     const $tweet = $('<div></div>')
       .addClass('tweet');
     
@@ -49,12 +55,9 @@ const displayHomeTimeline = () => {
     const tweetText = `: ${tweet.message}`;
     $tweet.append($username).append(tweetText);
 
-    
-
     const $timestamp = $('<div></div>').addClass('timestamp');
     const timestampText = moment(tweet.created_at).fromNow();
     $timestamp.text(timestampText);
-
 
     $tweet.append($timestamp);
     $('#random-tweet-details').prepend($tweet);
@@ -77,6 +80,12 @@ const displayUserTimeline = (username) => {
     $('#user-tweet-details').prepend($tweet);
   });
 };
+
+//Event Listener for the hashtag timeline
+$('#hashtag-details').on('click', ',hashtag', function() {
+
+})
+
 
 
 // Event listener for the new tweet button
