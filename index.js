@@ -6,8 +6,20 @@ $(document).ready(() => {
 // Function to display home timeline
 const displayHomeTimeline = () => {
   $('#random-tweet-details').empty();
+  let re = /#[\w\-.]+/g;
   streams.home.forEach(tweet => {
-    const $tweet = $('<div></div>').addClass('tweet');
+    
+   let hashtagText = `${tweet.message.match(re)}`;
+   if (re.test(tweet.message)) {
+    const $hashtag = $('<span></span>')
+    .addClass('hashtag')
+    .text(hashtagText)
+    .css('color', 'blue')
+    .css('cursor', 'pointer');
+    
+    const $tweet = $('<div></div>')
+      .addClass('tweet');
+    
     const $username = $('<span></span>')
       .addClass('username')
       .text(`@${tweet.user}`)
@@ -19,6 +31,30 @@ const displayHomeTimeline = () => {
     const $timestamp = $('<div></div>').addClass('timestamp');
     const timestampText = moment(tweet.created_at).fromNow();
     $timestamp.text(timestampText);
+
+    $tweet.append($timestamp);
+
+    $tweet.append($hashtag);
+    $('#random-tweet-details').prepend($tweet);
+   }
+
+   const $tweet = $('<div></div>')
+     .addClass('tweet');
+ 
+    const $username = $('<span></span>')
+      .addClass('username')
+      .text(`@${tweet.user}`)
+      .css('color', 'blue')
+      .css('cursor', 'pointer');
+    const tweetText = `: ${tweet.message}`;
+    $tweet.append($username).append(tweetText);
+
+    
+
+    const $timestamp = $('<div></div>').addClass('timestamp');
+    const timestampText = moment(tweet.created_at).fromNow();
+    $timestamp.text(timestampText);
+
 
     $tweet.append($timestamp);
     $('#random-tweet-details').prepend($tweet);
@@ -53,8 +89,9 @@ $('#new-tweet-button').on('click', function() {
   // Display the home timeline
   $('#hashtag-timeline').hide();
   displayHomeTimeline();
-  console.log(hashtagDetails(streams.home));
-  
+  //streams has 'hahtags' prop with all hashtag details
+  streams['hashtags'] = hashtagDetails();
+  //console.log(streams['hashtags'])
 
 });
 
@@ -148,13 +185,12 @@ const writeTweet = (message) => {
   };
 
 
-// Functionality to save hashtags, instancs of hashtages, usernmames, and timestamps to a data structure
-// 
-const hashtagDetails = function(arr) {
+// Functionality to save hashtags, instancs of hashtages, usernmames, and timestamps to a nested object data structure
+const hashtagDetails = function() {
   let cache = {};
   let re = /#[\w\-.]+/g;
 
-  arr.forEach(obj => {
+  streams.home.forEach(obj => {
       let username = obj.user;
       let timestamp = moment(obj.created_at).fromNow();
       let hashtags = obj.message.match(re); // Note the plural 'hashtags'
@@ -172,7 +208,6 @@ const hashtagDetails = function(arr) {
               } else {
                   cache[hashtag].count++;
               }
-
               if (!cache[hashtag].details[username]) {
                   cache[hashtag].details[username] = [];
               }
@@ -181,10 +216,99 @@ const hashtagDetails = function(arr) {
           });
       }
   });
-
+  /*
+    //nested object
+      //{ #hashtag: {
+            count: num,
+            details: {
+              username: [timestamp, timestamp, ...timestamp]
+            }
+          }
+        }
+    */
   return cache;
 };
+    //invoke hashtagDetails function
+      hashtagDetails();
 
+// function to loop through hashtag nesteed object structure
+// pulls out hashtag and usernames
+// returns a one line string
+// ` ${hashtag} was used ${count} times by users: ${username}, ${username}, ...${username}.`
+// To access object details:
+//    object keys are #hashtags
+//        each hashtag key has a count prop
+//        each hashtag ley has a details prop
+//              each details prop has a username prop
+// Function to display home timeline
+/*
+    const displayHashtagTimeline = () => {
+      $('#hashtag-details').empty();
+      let re = /#[\w\-.]+/g;
+
+      streams.home.forEeach(tweet => {
+        let $details = $('<div></div)').addClass('details');
+        let $hashtag = $('<span></span>')
+                .addClass('hashtag')
+                .text(`${tweet.match(re)}`)
+                .css('color', 'blue')
+                .css('cursor', 'pointer');
+      $details.append($hashtag);
+      $('#hashtag-details').prepend($details);
+
+      });
+      /*
+      streams.hashtags.forEach(tweet => {
+        const $tweet = $('<div></div>').addClass('tweet');
+        const $username = $('<span></span>')
+          .addClass('username')
+          .text(`@${tweet.user}`)
+          .css('color', 'blue')
+          .css('cursor', 'pointer');
+        const tweetText = `: ${tweet.message}`;
+        $tweet.append($username).append(tweetText);
+
+        const $timestamp = $('<div></div>').addClass('timestamp');
+        const timestampText = moment(tweet.created_at).fromNow();
+        $timestamp.text(timestampText);
+
+        $tweet.append($timestamp);
+        $('#random-tweet-details').prepend($tweet);
+      });
+      
+};
+
+     displayHashtagTimeline()
+*/
+
+
+
+
+
+  /*
+  const hastag_Timetag_Username = streams.home.forEach(obj => {
+          let hashtagArr = [];
+          let timestamps = [];
+          let usernames = [];
+          let re = /#[\w\-.]+/g;
+          let hashtag = obj.message.match(re);
+
+          if (hashtag) {
+
+          }
+  });
+*/
+/*
+  const onlyNames = function() {
+    const objHashtags = hashtagDetails();
+    let hashtags = Object.keys(objHashtags);
+       for (let key in objHashtags) {
+
+       }
+  }
+  */
+  
+    
       
     /*
     //to view data structure of return cache of all hashtags and details
