@@ -85,14 +85,14 @@ const displayUserTimeline = (username) => {
 
   // Function to display hashtag details
 const displayHashtagDetails = (hashtag) => {
- // const dataTotals = hashtagDetails();
+ 
+ const detailsContainer = $('#hashtag-details');
+ detailsContainer.empty();
+
   const hashtagData = streams.hashtags[hashtag];
   //console.log(hashtagData);
   if (!hashtagData) return;
-
-  const detailsContainer = $('#hashtag-details');
-  detailsContainer.empty();
-
+ 
   let detailsHTML = `<h2>${hashtag}</h2>`;
   detailsHTML += `<p>Count: ${hashtagData.count}</p>`;
   detailsHTML.addClass('hashtag');
@@ -114,7 +114,7 @@ displayHashtagDetails();
 
 // Bind click event to hashtag elements
 $('#hashtag-details').on('click', '.hashtag', function() {
-  const hashtag = $(this).text();
+  const hashtag = $(this);
   displayHashtagDetails(hashtag);
   $('#random-tweet-details').hide();
   $('#user-timeline').hide();
@@ -140,23 +140,7 @@ $('#new-tweet-button').on('click', function() {
   //console.log(names())
   //console.log(hashtag());
   //console.log(streams.hashtags)
-  /*
-  streams.hashtags = hashtagDetails();
-  let tags = Object.keys(streams.hashtags);
-  let userTimestamp = [];
-
-    let i = 0
-    while (i < tags.length) {
-      let cache = {};
-      cache['username'] = Object.keys(streams.hashtags[tags[i]]['details'])
-      
-      //console.log(users)
-      console.log(cache)
-      i++;
-    }
   
-   console.log(streams.hashtags[tags[0]]['details'])
-   */
 });
 
 // Event delegation for username clicks to display user timeline
@@ -164,7 +148,7 @@ $('#random-tweet-details').on('click', '.username', function() {
   const username = $(this).text().substring(1); // Remove the @ symbol
   displayUserTimeline(username);
   $('#random-tweet-details').hide();
-  $('#hashtag-timeline').hide();
+  $('#hashtag-details').hide();
   $('#user-timeline').show();
 });
 
@@ -173,14 +157,14 @@ $('#random-tweet-details').on('click', '.username', function() {
 // Event listener for the back button to return to home timeline
 $('#back-button-user').on('click', function() {
   $('#user-timeline').hide();
-  $('#hashtag-timeline').hide();
+  $('#hashtag-details').hide();
   $('#random-tweet-details').show();
 });
 
 //event listener for the back button hashtag return to random tweets timeline
 $('#back-button-hashtag').on('click', function() {
   $('#user-timeline').hide();
-  $('#hashtag-timeline').hide();
+  $('#hashtag-details').hide();
   $('#random-tweet-details').show();
 })
 
