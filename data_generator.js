@@ -6,7 +6,7 @@
 // Set up data structures
 const streams = {
   home: [],
-  hashtags: {},
+  hashtags: [],
   users: {
     shawndrost: [],
     sharksforcheap: [],
